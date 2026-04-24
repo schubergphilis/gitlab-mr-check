@@ -1,6 +1,6 @@
 [project]
 name = "gitlab-mr-check"
-version = "0.0.0"
+version = "1.0.0"
 description = "GitLab Merge Request 4-Eyes Approval Audit Tool"
 readme = "README.md"
 authors = [

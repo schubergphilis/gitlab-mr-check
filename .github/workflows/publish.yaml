@@ -1,0 +1,47 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-deps-image:
+    uses: ./.github/workflows/build-deps-image.yaml
+    permissions:
+      contents: read
+      packages: write
+
+  publish:
+    name: Publish package
+    needs: build-deps-image
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.build-deps-image.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    environment: pypi
+
+    steps:
+      - name: Configure git
+        run: git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+
+      - name: Checkout repository
+        if: ${{ !env.ACT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git init -b main
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin "${GITHUB_SHA}"
+          git checkout FETCH_HEAD
+
+      - name: Publish package and upload SBOM
+        env:
+          UV_PUBLISH_URL: ${{ secrets.UV_PUBLISH_URL }}
+          UV_PUBLISH_PASSWORD: ${{ secrets.UV_PUBLISH_PASSWORD }}
+          UV_PUBLISH_USERNAME: ${{ secrets.UV_PUBLISH_USERNAME }}
+          OWASP_DTRACK_URL: ${{ secrets.OWASP_DTRACK_URL }}
+          OWASP_DTRACK_API_KEY: ${{ secrets.OWASP_DTRACK_API_KEY }}
+        run: ./workflow.cmd release.publish

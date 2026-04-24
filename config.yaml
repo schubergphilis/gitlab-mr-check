@@ -1,0 +1,6 @@
+gitlab:
+  audit:
+    years: [2026]
+  groups:
+    - name: SaaS
+    - name: SaaS-Cookbooks

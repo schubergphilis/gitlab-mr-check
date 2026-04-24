@@ -1,0 +1,3 @@
+ARG UV_IMAGE
+FROM catthehacker/ubuntu:act-latest
+COPY --from=${UV_IMAGE} /uv /usr/local/bin/uv

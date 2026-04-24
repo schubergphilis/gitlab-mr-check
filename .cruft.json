@@ -1,0 +1,29 @@
+{
+  "template": "https://github.com/costastf/paleofuturistic_python",
+  "commit": "fa47f024820aa37e4398b481edc60b77bf4b7a18",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "gitlab-mr-check",
+      "project_slug": "gitlab-mr-check",
+      "project_description": "GitLab Merge Request 4-Eyes Approval Audit Tool",
+      "full_name": "gitlab-mr-check",
+      "email": "yhoorneman@schubergphilis.com",
+      "min_python_version": "3.13",
+      "max_python_version": "3.14",
+      "license": "Apache-2.0",
+      "integrate_dependency_track": true,
+      "_known_python_versions": [
+        "3.13",
+        "3.14"
+      ],
+      "_copy_without_render": [
+        "_CI/lib/*",
+        "*/_CI/lib/*"
+      ],
+      "_template": "https://github.com/costastf/paleofuturistic_python",
+      "_commit": "fa47f024820aa37e4398b481edc60b77bf4b7a18"
+    }
+  },
+  "directory": null
+}

@@ -12,7 +12,7 @@
       "min_python_version": "3.13",
       "max_python_version": "3.14",
       "license": "Apache-2.0",
-      "integrate_dependency_track": true,
+      "integrate_dependency_track": false,
       "_known_python_versions": [
         "3.13",
         "3.14"

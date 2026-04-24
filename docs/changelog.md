@@ -1,5 +1,6 @@
-# Changelog
+## v1.0.0 (2026-04-24)
 
-All notable changes to this project will be documented in this file.
+### Feat
 
-The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
+- **pyscn**: add complexity thresholds for analysis
+- **bin**: add new CLI scripts for various tools

@@ -20,11 +20,77 @@
 
 GitLab Merge Request 4-Eyes Approval Audit Tool
 
-## Usage
+Audits GitLab groups and projects to verify that every merged MR was approved by at least one person other than the author (4-eyes principle). Can be used as a CLI tool or imported as a library.
+
+## Installation
 
 Legacy: `pip install gitlab-mr-check`
 
 Preferred: `uv add gitlab-mr-check`
+
+## CLI usage
+
+Requires a `config.yaml` describing which GitLab groups and years to audit:
+
+```yaml
+gitlab:
+  audit:
+    years: [2026]
+  groups:
+    - name: MyGroup
+    - name: MyGroup-Cookbooks
+logging:
+  host: ""
+  token: ""
+```
+
+Run the audit:
+
+```sh
+gitlab-mr-check --url https://gitlab.example.com --token <token>
+```
+
+Output as CSV:
+
+```sh
+gitlab-mr-check --url https://gitlab.example.com --token <token> \
+    --output csv --output-file results.csv
+```
+
+Limit columns:
+
+```sh
+gitlab-mr-check --url https://gitlab.example.com --token <token> \
+    --fields project,iid,passed
+```
+
+Credentials can also be supplied via `URL` and `TOKEN` environment variables.
+
+## Library usage
+
+```python
+from gitlab_mr_check import audit, parse_config_file
+
+config = parse_config_file("config.yaml")
+results = audit(url="https://gitlab.example.com", token="<token>", config=config)
+
+for project in results:
+    print(project.name, project.summary)
+    for mr in project.mrs_failed:
+        print(f"  !{mr.iid}: {mr.reasoning}")
+```
+
+`audit()` returns a list of `ProjectMRAuditResult` objects, each with:
+
+| Attribute | Description |
+|-----------|-------------|
+| `name` | Project name |
+| `mr_results` | All checked MRs (`MRApprovalResult` list) |
+| `mrs_passed` | MRs that passed 4-eyes |
+| `mrs_failed` | MRs that failed 4-eyes |
+| `passed` | `True` if all MRs passed |
+| `percentage` | Pass percentage |
+| `summary` | Human-readable summary string |
 
 ## Developing further
 

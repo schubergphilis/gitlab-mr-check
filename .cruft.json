@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/costastf/paleofuturistic_python",
-  "commit": "4475b61c2bce05f7ca1bbf6089c8e6ac4a8feba4",
+  "commit": "264a97c45695cc19067020acba56544b0273abef",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -22,7 +22,7 @@
         "*/_CI/lib/*"
       ],
       "_template": "https://github.com/costastf/paleofuturistic_python",
-      "_commit": "4475b61c2bce05f7ca1bbf6089c8e6ac4a8feba4"
+      "_commit": "264a97c45695cc19067020acba56544b0273abef"
     }
   },
   "directory": null

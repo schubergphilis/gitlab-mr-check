@@ -1,1 +1,1 @@
--P ubuntu-latest=gitlab-mr-check-act:latest
+-P ubuntu-latest=gitlab_mr_check-act:latest

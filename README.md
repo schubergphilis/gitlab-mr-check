@@ -1,7 +1,7 @@
 # gitlab-mr-check
 
-[![Version](https://img.shields.io/badge/version-0.0.0-blue)](https://pypi.org/project/gitlab-mr-check/)
-[![Python](https://img.shields.io/badge/python-3.13%20%7C%203.14-blue?logo=python&logoColor=white)](https://www.python.org)
+[![Version](https://img.shields.io/badge/version-0.0.0-blue)](https://pypi.org/project/gitlab_mr_check/)
+[![Python](https://img.shields.io/badge/python-3.13-blue?logo=python&logoColor=white)](https://www.python.org)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](https://opensource.org/license/apache-2.0)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -15,82 +15,16 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog%201.1.0-orange)](https://keepachangelog.com/en/1.1.0/)
 [![Build](https://img.shields.io/badge/build-unknown-lightgrey)]()
-[![Coverage](https://img.shields.io/badge/coverage-0%25-red)](https://coverage.readthedocs.io/)
+[![Coverage](https://img.shields.io/badge/coverage-33%25-red)](https://coverage.readthedocs.io/)
 [![pyscn quality](https://img.shields.io/badge/pyscn-not%20rated-lightgrey)](https://pyscn.ludo-tech.org)
 
 GitLab Merge Request 4-Eyes Approval Audit Tool
 
-Audits GitLab groups and projects to verify that every merged MR was approved by at least one person other than the author (4-eyes principle). Can be used as a CLI tool or imported as a library.
+## Usage
 
-## Installation
+Legacy: `pip install gitlab_mr_check`
 
-Legacy: `pip install gitlab-mr-check`
-
-Preferred: `uv add gitlab-mr-check`
-
-## CLI usage
-
-Requires a `config.yaml` describing which GitLab groups and years to audit:
-
-```yaml
-gitlab:
-  audit:
-    years: [2026]
-  groups:
-    - name: MyGroup
-    - name: MyGroup-Cookbooks
-logging:
-  host: ""
-  token: ""
-```
-
-Run the audit:
-
-```sh
-gitlab-mr-check --url https://gitlab.example.com --token <token>
-```
-
-Output as CSV:
-
-```sh
-gitlab-mr-check --url https://gitlab.example.com --token <token> \
-    --output csv --output-file results.csv
-```
-
-Limit columns:
-
-```sh
-gitlab-mr-check --url https://gitlab.example.com --token <token> \
-    --fields project,iid,passed
-```
-
-Credentials can also be supplied via `URL` and `TOKEN` environment variables.
-
-## Library usage
-
-```python
-from gitlab_mr_check import audit, parse_config_file
-
-config = parse_config_file("config.yaml")
-results = audit(url="https://gitlab.example.com", token="<token>", config=config)
-
-for project in results:
-    print(project.name, project.summary)
-    for mr in project.mrs_failed:
-        print(f"  !{mr.iid}: {mr.reasoning}")
-```
-
-`audit()` returns a list of `ProjectMRAuditResult` objects, each with:
-
-| Attribute | Description |
-|-----------|-------------|
-| `name` | Project name |
-| `mr_results` | All checked MRs (`MRApprovalResult` list) |
-| `mrs_passed` | MRs that passed 4-eyes |
-| `mrs_failed` | MRs that failed 4-eyes |
-| `passed` | `True` if all MRs passed |
-| `percentage` | Pass percentage |
-| `summary` | Human-readable summary string |
+Preferred: `uv add gitlab_mr_check`
 
 ## Developing further
 

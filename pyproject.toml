@@ -1,27 +1,23 @@
 [project]
-name = "gitlab-mr-check"
+name = "gitlab_mr_check"
 version = "1.1.0"
 description = "GitLab Merge Request 4-Eyes Approval Audit Tool"
 readme = "README.md"
 authors = [
-    {name = "gitlab-mr-check", email = "yhoorneman@schubergphilis.com"},
+    {name = "Yorick Hoorneman", email = "yhoorneman@schubergphilis.com"},
 ]
 requires-python = ">=3.13"
 dependencies = [
     "python-gitlab>=8.2.0",
-    "pyyaml>=6.0",
-    "tabulate>=0.9.0",
+    "pyyaml>=6.0.3",
+    "tabulate>=0.10.0",
 ]
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 classifiers = [
     # Python versions supported by the package
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
 ]
-
-[project.scripts]
-gitlab-mr-check = "gitlab_mr_check.cli:main"
 
 # click is a transient dependency of mkdocs, but broken beyond version 8.2.1
 # so this pin is needed until the following issue is fixed:
@@ -56,7 +52,6 @@ quality = [
 ]
 security = [
     "cyclonedx-bom",
-    "owasp-dependency-track-cli",
     "pip-audit",
 ]
 test = [
@@ -95,6 +90,17 @@ version_provider = "uv"
 version_scheme = "pep440"
 tag_format = "v$version"
 changelog_file = "docs/changelog.md"
+
+[tool.commitizen.change_type_map]
+feat = "Features"
+fix = "Bug Fixes"
+perf = "Performance"
+refactor = "Refactoring"
+docs = "Documentation"
+build = "Build"
+ci = "CI"
+chore = "Chores"
+revert = "Reverts"
 
 [tool.ruff]
 target-version = "py313"
@@ -141,8 +147,7 @@ ignore = [
     "D213",    # multi-line-summary-second-line (conflicts with D212)
     # "D105",    # undocumented-magic-method
     # "D107",    # undocumented-public-init
-    "TRY003",  # raise-vanilla-args — custom exception classes for every message is too pedantic
-    "TRY301",  # abstract-raise-to-inner-function — too pedantic
+    # "TRY003",  # raise-vanilla-args
     # "EM101",   # raw-string-in-exception
     # "EM102",   # f-string-in-exception
     # "BLE001",  # blind-exception (legitimate in network code)
@@ -155,7 +160,7 @@ ignore = [
     # "PLC0415", # import-outside-toplevel (used intentionally)
     # "ANN002",  # missing-type-args
     # "ANN003",  # missing-type-kwargs
-    "ANN401",  # dynamically-typed-expression — python-gitlab has no type stubs
+    # "ANN401",  # dynamically-typed-expression (Any in **kwargs is legitimate)
     # "TD",      # todo comments
     # "FIX",     # fixme comments
     # "ERA",     # commented-out code
@@ -176,8 +181,8 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**/*.py" = ["S101", "S311", "RUF012", "PLR2004"]
-"src/**/*.py" = ["UP038"]
+"tests/*.py" = ["S101", "S311", "RUF012", "PLR2004"]
+"src/*.py" = ["UP038"]
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
@@ -249,7 +254,7 @@ branch = true
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
-fail_under = 0
+fail_under = 33
 exclude_lines = [
     "pragma: no cover",
     "if __name__ == .__main__.",
@@ -271,13 +276,11 @@ directory = "reports/coverage"
 [tool.uv]
 required-version = "==0.11.7"
 exclude-newer = "1 week"
-exclude-newer-package = { lxml = "2026-04-24" }
 
 [tool.tox]
 requires = ["tox>=4.21", "tox-uv>=1.16"]
 env_list = [
     "py313",
-    "py314",
 ]
 
 [tool.tox.env_run_base]

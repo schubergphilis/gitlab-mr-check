@@ -1,5 +1,5 @@
 site_name: gitlab-mr-check
-site_author: gitlab-mr-check
+site_author: Yorick Hoorneman
 site_description: GitLab Merge Request 4-Eyes Approval Audit Tool
 
 theme:

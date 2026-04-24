@@ -8,8 +8,7 @@ from typing import cast
 from invoke import Collection, Context, Task, task
 
 from .build import build
-from .configuration import OWASP_DTRACK_SETTINGS, UV_PUBLISH_SETTINGS
-from .secure import sbom_upload
+from .configuration import UV_PUBLISH_SETTINGS
 from .shared import execute, logged
 
 
@@ -83,14 +82,12 @@ def publish(context: Context) -> None:
     """Build, publish, and upload SBOM — the full post-release publishing pipeline."""
     oidc = bool(os.environ.get('ACTIONS_ID_TOKEN_REQUEST_URL'))
     missing = [] if oidc else [v for v in UV_PUBLISH_SETTINGS if not os.environ.get(v)]
-    missing += [v for v in OWASP_DTRACK_SETTINGS if not os.environ.get(v)]
     if missing:
         print(f'Missing required environment variables: {", ".join(missing)}')
         raise SystemExit(1)
     clean(context)
     build(context)
     execute(context, 'uv publish')
-    sbom_upload(context)
     clean(context)
 
 

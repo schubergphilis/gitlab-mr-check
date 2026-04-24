@@ -22,6 +22,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     environment: pypi
+    permissions:
+      id-token: write
 
     steps:
       - name: Configure git

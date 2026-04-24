@@ -54,21 +54,19 @@ quality                Run all quality checks
 quality.pyscn-analyze  Comprehensive analysis with HTML report
 quality.pyscn-check    CI-friendly quality gate
 
-release                Full release flow: validate, bump, changelog, push, build, publish, upload SBOM, clean
+release                Prepare release on `release/<version>` branch: validate, branch off main, bump, changelog, push branch + tag
 release -i <type>      Version increment type: major, minor, patch, alpha, beta, rc
-release --no-push      Skip push step (useful during development)
+release --no-push      Keep the branch + tag local instead of pushing
 release.validate       Ensure working tree is clean
 release.bump           Bump version and create git tag
 release.changelog      Print changelog to stdout (--write to persist and commit)
-release.push           Push commit and tags to remote
-release.publish        Publish package to PyPI
-release.sbom-upload    Extract and upload SBOM to Dependency Track
+release.push           Push current branch and tags to remote
+release.publish        Build, publish to PyPI, upload SBOM (invoked by CI on release-tag merge)
 release.clean          Remove build artifacts (dist/ and sbom.json)
 
 secure                 Run all security checks
 secure.audit           pip-audit (supports --ignore with expiry dates)
 secure.sbom-extract    Generate CycloneDX SBOM (--write to save to sbom.json)
-secure.sbom-upload     Extract SBOM and upload to OWASP Dependency Track
 
 test                   Run all tests
 test.pytest            Run pytest with coverage and HTML reports
@@ -94,8 +92,6 @@ Centralized constants shared across task modules:
 | `PATHS` | Standard directories targeted by linters/formatters: `src/ _CI/tasks/ tests/` |
 | `SECURITY_OVERRIDE_ENV` | Environment variable name for security audit overrides |
 | `IGNORE_PATTERN` | Regex for parsing vulnerability IDs with optional expiry dates |
-| `OWASP_DTRACK_SETTINGS` | Required environment variables for Dependency Track uploads |
-| `PROJECT_NAME` | Project name for SBOM uploads |
 | `IMAGE_NAME` / `ACT_IMAGE_NAME` | Container image names for deps cache and act |
 | `QA_WORKFLOW` | Path to the CI workflow YAML |
 | `PYSCN_REPORTS_DIR` | Directory for pyscn HTML reports |

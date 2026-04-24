@@ -1,5 +1,0 @@
-gitlab:
-  audit:
-    years: [2026]
-  groups:
-    - name: AnyGitlabGroup

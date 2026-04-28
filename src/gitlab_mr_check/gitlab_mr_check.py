@@ -48,6 +48,11 @@ class MRApprovalResult:
     iid: int
     passed: bool
     reasoning: str
+    title: str = ''
+    web_url: str = ''
+    state: str = ''
+    created_at: str = ''
+    updated_at: str = ''
 
 
 @dataclass
@@ -111,7 +116,16 @@ def has_4eyes_approval(mr: gitlab.v4.objects.ProjectMergeRequest) -> MRApprovalR
     approvers = {user['user']['username'] for user in approved_by}
     passed = bool(approvers - {author})
     reasoning = f'MR !{mr.iid} by {author} approved by {", ".join(approvers)} - 4-eyes approval: {passed}'
-    return MRApprovalResult(iid=mr.iid, passed=passed, reasoning=reasoning)
+    return MRApprovalResult(
+        iid=mr.iid,
+        passed=passed,
+        reasoning=reasoning,
+        title=mr.title,
+        web_url=mr.web_url,
+        state=mr.state,
+        created_at=mr.created_at,
+        updated_at=mr.updated_at,
+    )
 
 
 def mr_is_merged(mr: gitlab.v4.objects.ProjectMergeRequest) -> bool:

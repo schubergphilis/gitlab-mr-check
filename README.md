@@ -15,7 +15,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog%201.1.0-orange)](https://keepachangelog.com/en/1.1.0/)
 [![Build](https://img.shields.io/badge/build-unknown-lightgrey)]()
-[![Coverage](https://img.shields.io/badge/coverage-33%25-red)](https://coverage.readthedocs.io/)
+[![Coverage](https://img.shields.io/badge/coverage-34%25-red)](https://coverage.readthedocs.io/)
 [![pyscn quality](https://img.shields.io/badge/pyscn-not%20rated-lightgrey)](https://pyscn.ludo-tech.org)
 
 GitLab Merge Request 4-Eyes Approval Audit Tool

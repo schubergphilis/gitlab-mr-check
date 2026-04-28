@@ -1,3 +1,10 @@
+## v1.4.0 (2026-04-28)
+
+### Features
+
+- **security**: add expiry date for CVE-2026-3219
+- **mr**: add additional fields to MRApprovalResult
+
 ## v1.3.0 (2026-04-24)
 
 ### Bug Fixes

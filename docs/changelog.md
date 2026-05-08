@@ -1,3 +1,9 @@
+## v1.4.1 (2026-05-08)
+
+### Bug Fixes
+
+- **ci**: add least-privilege token permissions to publish detect job
+
 ## v1.4.0 (2026-04-28)
 
 ### Features
@@ -12,6 +18,10 @@
 - **release**: handle empty UV_PUBLISH_* vars for OIDC users
 
 ## v1.2.0 (2026-04-24)
+
+### Bug Fixes
+
+- **audit**: exclude archived projects from listing
 
 ## v1.1.0 (2026-04-24)
 

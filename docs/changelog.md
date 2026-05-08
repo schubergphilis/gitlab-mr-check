@@ -1,3 +1,9 @@
+## v1.4.2 (2026-05-08)
+
+### Bug Fixes
+
+- **audit**: preserve project name alongside lazy Project handle
+
 ## v1.4.1 (2026-05-08)
 
 ### Bug Fixes

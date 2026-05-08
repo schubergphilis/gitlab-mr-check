@@ -22,6 +22,7 @@ from functools import partial
 from typing import Any
 
 import gitlab
+import gitlab.v4.objects
 
 from gitlab_mr_check.helpers.config import Config
 
@@ -47,6 +48,11 @@ class MRApprovalResult:
     iid: int
     passed: bool
     reasoning: str
+    title: str = ''
+    web_url: str = ''
+    state: str = ''
+    created_at: str = ''
+    updated_at: str = ''
 
 
 @dataclass
@@ -102,7 +108,7 @@ def get_groups_recursive(gl: gitlab.Gitlab, group_id_or_name: str | int) -> list
     return result
 
 
-def has_4eyes_approval(mr: Any) -> MRApprovalResult:
+def has_4eyes_approval(mr: gitlab.v4.objects.ProjectMergeRequest) -> MRApprovalResult:
     """Check whether a merge request satisfies the 4-eyes approval requirement."""
     approvals = mr.approvals.get()
     approved_by = approvals.approved_by
@@ -110,20 +116,29 @@ def has_4eyes_approval(mr: Any) -> MRApprovalResult:
     approvers = {user['user']['username'] for user in approved_by}
     passed = bool(approvers - {author})
     reasoning = f'MR !{mr.iid} by {author} approved by {", ".join(approvers)} - 4-eyes approval: {passed}'
-    return MRApprovalResult(iid=mr.iid, passed=passed, reasoning=reasoning)
+    return MRApprovalResult(
+        iid=mr.iid,
+        passed=passed,
+        reasoning=reasoning,
+        title=mr.title,
+        web_url=mr.web_url,
+        state=mr.state,
+        created_at=mr.created_at,
+        updated_at=mr.updated_at,
+    )
 
 
-def mr_is_merged(mr: Any) -> bool:
+def mr_is_merged(mr: gitlab.v4.objects.ProjectMergeRequest) -> bool:
     """Return True if the MR state is merged."""
     return mr.state == 'merged'
 
 
-def mr_updated_in_years(mr: Any, years: list[int]) -> bool:
+def mr_updated_in_years(mr: gitlab.v4.objects.ProjectMergeRequest, years: list[int]) -> bool:
     """Return True if the MR was last updated in one of the given calendar years."""
     return datetime.fromisoformat(mr.updated_at).year in years
 
 
-def get_mrs_by_project(project: Any, filters: list[Any]) -> list[Any]:
+def get_mrs_by_project(project: gitlab.v4.objects.Project, filters: list[Any]) -> list[Any]:
     """Return all MRs from a project that pass every filter predicate."""
     return [mr for mr in project.mergerequests.list(all=True) if all(f(mr) for f in filters)]
 

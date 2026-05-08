@@ -6,13 +6,7 @@ from typing import cast
 
 from invoke import Collection, Context, Task, task
 
-from .configuration import (
-    IGNORE_PATTERN,
-    OWASP_DTRACK_SETTINGS,
-    PROJECT_NAME,
-    SECURITY_OVERRIDE_ENV,
-    SECURITY_OVERRIDES_FILE,
-)
+from .configuration import IGNORE_PATTERN, SECURITY_OVERRIDE_ENV, SECURITY_OVERRIDES_FILE
 from .shared import execute, logged
 
 
@@ -67,7 +61,7 @@ def audit(context: Context, ignore: str | None = None) -> None:
     """Run pip-audit security scan.
 
     Suppressions are sourced, in precedence order, from ``--ignore``, the
-    ``GITLAB-MR-CHECK_SECURITY_OVERRIDE`` environment
+    ``GITLAB_MR_CHECK_SECURITY_OVERRIDE`` environment
     variable, and a ``.security-overrides`` file at the project root. All three
     are merged and deduplicated. Each entry is a vulnerability ID with an
     optional expiry (``CVE-2024-1234::2026-12-31``); entries whose expiry has
@@ -108,33 +102,6 @@ def sbom_extract(context: Context, write: bool = False) -> None:
 
 
 @task
-@logged('secure.sbom-upload')
-def sbom_upload(context: Context) -> None:
-    """Extract and upload SBOM to OWASP Dependency Track.
-
-    Requires the OWASP_DTRACK_URL and OWASP_DTRACK_API_KEY environment variables to be set.
-    """
-    missing = [v for v in OWASP_DTRACK_SETTINGS if not os.environ.get(v)]
-    if missing:
-        print(f'Missing required environment variables: {", ".join(missing)}')
-        print('Set them to enable SBOM uploads to Dependency Track.')
-        raise SystemExit(1)
-    sbom_extract(context, write=True)
-    result = context.run('uv run cz version -p', hide=True)
-    if result is None or result.failed:
-        print('Could not determine project version.')
-        raise SystemExit(1)
-    version = result.stdout.strip()
-    execute(
-        context,
-        f'uv run owasp-dtrack-cli test '
-        f'--project-name {PROJECT_NAME} '
-        f'--project-version {version} '
-        f'--auto-create sbom.json',
-    )
-
-
-@task
 @logged('secure.validate-overrides')
 def validate_overrides(context: Context) -> None:  # noqa: ARG001
     """Validate every entry in .security-overrides without running the audit.
@@ -168,4 +135,3 @@ namespace.add_task(cast(Task, secure), default=True, name='all')
 namespace.add_task(cast(Task, audit))
 namespace.add_task(cast(Task, sbom_extract))
 namespace.add_task(cast(Task, validate_overrides))
-namespace.add_task(cast(Task, sbom_upload))

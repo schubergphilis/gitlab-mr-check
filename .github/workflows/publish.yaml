@@ -9,6 +9,8 @@ jobs:
   detect:
     name: Detect release tag
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       tag: ${{ steps.find.outputs.tag }}
     steps:

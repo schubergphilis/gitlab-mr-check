@@ -143,9 +143,9 @@ def get_mrs_by_project(project: gitlab.v4.objects.Project, filters: list[Any]) -
     return [mr for mr in project.mergerequests.list(all=True) if all(f(mr) for f in filters)]
 
 
-def get_mrs_by_projects(projects: list[Any], filters: list[Any]) -> dict[str, list[Any]]:
-    """Return a mapping of project name to filtered MR list for each project."""
-    return {project.name: get_mrs_by_project(project, filters) for project in projects}
+def get_mrs_by_projects(projects: list[tuple[str, Any]], filters: list[Any]) -> dict[str, list[Any]]:
+    """Return a mapping of project name to filtered MR list for each (name, project) pair."""
+    return {name: get_mrs_by_project(project, filters) for name, project in projects}
 
 
 def evaluate_mrs_4eyes_per_project(project_mrs: dict[str, list[Any]]) -> list[ProjectMRAuditResult]:
@@ -194,7 +194,7 @@ def audit(url: str, token: str, config: Config) -> list[ProjectMRAuditResult]:
         LOGGER.info('  Group %s: %d project(s)', group.full_path, len(group_projects))
         for project in group_projects:
             LOGGER.info('    Project: %s', project.path_with_namespace)
-            gl_projects.append(gl.projects.get(project.id, lazy=True))
+            gl_projects.append((project.path_with_namespace, gl.projects.get(project.id, lazy=True)))
     LOGGER.info('Found %d project(s)', len(gl_projects))
 
     LOGGER.info('Getting the merge requests under the projects')

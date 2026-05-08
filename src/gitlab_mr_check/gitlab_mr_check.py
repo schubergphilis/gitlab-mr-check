@@ -190,20 +190,16 @@ def audit(url: str, token: str, config: Config) -> list[ProjectMRAuditResult]:
     LOGGER.info('Getting the projects under the groups')
     gl_projects = []
     for group in gl_groups:
-        group_projects = group.projects.list(all=True)
+        group_projects = group.projects.list(all=True, archived=False)
         LOGGER.info('  Group %s: %d project(s)', group.full_path, len(group_projects))
         for project in group_projects:
-            LOGGER.info('    Project: %s (archived: %s)', project.path_with_namespace, project.archived)
-            gl_projects.append(gl.projects.get(project.id))
-    LOGGER.info(
-        'Found %d project(s) (%d after excluding archived)',
-        len(gl_projects),
-        sum(1 for p in gl_projects if not p.archived),
-    )
+            LOGGER.info('    Project: %s', project.path_with_namespace)
+            gl_projects.append(gl.projects.get(project.id, lazy=True))
+    LOGGER.info('Found %d project(s)', len(gl_projects))
 
     LOGGER.info('Getting the merge requests under the projects')
     gl_project_mrs = get_mrs_by_projects(
-        projects=[p for p in gl_projects if not p.archived],
+        projects=gl_projects,
         filters=[mr_is_merged, partial(mr_updated_in_years, years=config.gitlab.audit.years)],
     )
 
